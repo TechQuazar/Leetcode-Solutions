@@ -11,10 +11,10 @@ class Solution:
             Biinary Search baby
         '''
         m = len(quantities)
-        min_q = max(quantities)
+        max_q = max(quantities)
         x = float('inf')
         l=1
-        r=min_q
+        r=max_q
         def isPossible(m):
             curr_max = 0
             total_stores = 0
