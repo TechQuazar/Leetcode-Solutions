@@ -1,17 +1,19 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
-        res = 0
+        
         n = len(s)
+        res = 0
+        cache = {}
+        def recur(l,r):
+            if l>=r:
+                return 1
+            if (l,r) in cache:
+                return cache[(l,r)]
+            cache[(l,r)] = recur(l+1,r-1) if s[l]==s[r] else 0
+            return cache[(l,r)]
+
         for i in range(n):
-            l,r = i,i+1
-            while l>=0 and r<n and s[l]==s[r]:
-                res+=1
-                l-=1
-                r+=1
-            
-            l,r=i,i
-            while l>=0 and r<n and  s[l]==s[r]:
-                res+=1
-                l-=1
-                r+=1
+            for j in range(i,n):
+                res+= recur(i,j)
+
         return res
