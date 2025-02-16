@@ -1,18 +1,21 @@
 class Solution:
     def numDecodings(self, s: str) -> int:
         n = len(s)
-        cache = {}
-        def recur(i):
-            if i==n:
-                return 1
-            total = 0
-            if i in cache:
-                return cache[i]
-            if s[i]!='0':
-                total+=recur(i+1)
-            if i+1<n and (s[i]=='1' or s[i]=='2' and s[i+1]<='6'):
-                total+= recur(i+2)
-            cache[i] = total
-            return total
+        if s[0]=='0':
+            return 0
+        dp = [0 for _ in range(n)]
+        dp[0] = 1
+        if n==1:
+            return dp[0]
+        dp[1] = dp[0] if s[1]!='0' else 0
+        if 10<=int(s[:2])<=26:
+            dp[1]+=1
 
-        return recur(0)
+        for i in range(2,n):
+            total = 0
+            if s[i]!='0':
+                total+=dp[i-1]
+            if  s[i-1]=='1' or (s[i-1]=='2' and int(s[i])<=6):
+                total+=dp[i-2]
+            dp[i] = total
+        return dp[-1]
