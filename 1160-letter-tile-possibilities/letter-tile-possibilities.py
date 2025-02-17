@@ -5,23 +5,21 @@ class Solution:
             count[ord(ch)-ord('A')]+=1
         
         n = len(tiles)
-        seen = set()
-        def recur(i, curr):
+        res=0
+        def recur(i):
+            nonlocal res
             if i==n:
                 return
             
             for idx in range(26):
                 if count[idx]>0:
                     count[idx]-=1
-                    newCurr = curr+chr(ord('A')+idx)
-                    if newCurr in seen:
-                        break
-                    seen.add(newCurr)
-                    recur(i+1,newCurr)
+                    res+=1
+                    recur(i+1)
                     count[idx]+=1
             return 
 
-        recur(0,"")
+        recur(0)
 
         
-        return len(seen)
+        return res
