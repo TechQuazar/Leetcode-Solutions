@@ -8,11 +8,14 @@ class FindElements:
 
     def __init__(self, root: Optional[TreeNode]):
         self.root = root
+        self.seen = set()
 
         def recur(curr, x):
             if curr==None:
                 return None
             node = TreeNode(x)
+            if x not in self.seen:
+                self.seen.add(x)
             left = recur(curr.left,2*x+1)
             right = recur(curr.right,2*x+2)
             node.left = left
@@ -23,15 +26,7 @@ class FindElements:
         
 
     def find(self, target: int) -> bool:
-        
-        def recur(node):
-            if node==None:
-                return False
-            if node.val == target:
-                return True
-            return recur(node.left) or recur(node.right)
-        
-        return recur(self.root)
+        return True if target in self.seen else False
 
 
 # Your FindElements object will be instantiated and called as such:
