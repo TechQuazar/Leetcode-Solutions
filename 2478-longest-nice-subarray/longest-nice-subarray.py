@@ -1,13 +1,14 @@
 class Solution:
     def longestNiceSubarray(self, nums: List[int]) -> int:
+        B = 32
+        idx_at_bit = [[] for _ in range(B)]
         res = 0
-        l = 0
-        curr = 0 # bitmask
-        for r in range(len(nums)):
-            while curr & nums[r]:
-                curr ^= nums[l] # unset the bits from nums[l]
-                l+=1
-            res = max(res,r-l+1)
-            curr |= nums[r] # add the curr bits
-
+        for i,x in enumerate(nums):
+            r = -1
+            for j in range(B):
+                if x & (1<<j):
+                    idx_at_bit[j].append(i)
+                if len(idx_at_bit[j])>=2:
+                    r = max(r, idx_at_bit[j][-2]) # the second last, among all bits -> so the farthest one
+            res = max(res,i-r)
         return res
