@@ -26,7 +26,7 @@ class Solution:
         wordSet = set(words)
         cache = {}
         res = []
-        words.sort(key=lambda x:-len(x))
+        # words.sort(key=lambda x:-len(x))
         def canFormWord(word):
             if word in cache:
                 return cache[word]
