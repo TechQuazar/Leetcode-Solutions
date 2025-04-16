@@ -12,20 +12,19 @@ class Solution:
         if not node:
             return None
         q = deque()
-        seen = set()
+        q.append(node)
         curr = Node(node.val)
         res = curr
-        q.append((node,curr))
         nodeMap = {}
         nodeMap[node.val] = curr
         while q:
-            og, curr = q.popleft()
+            og = q.popleft()
             for nei in og.neighbors:
                 if nei.val not in nodeMap:
                     newNode = Node(nei.val)
                     nodeMap[nei.val] = newNode
-                    q.append((nei, nodeMap[nei.val]))
-                curr.neighbors.append(nodeMap[nei.val])
+                    q.append(nei)
+                nodeMap[og.val].neighbors.append(nodeMap[nei.val])
 
         # print('res',res.val, res.neighbors)
         return res
