@@ -5,15 +5,11 @@ class Solution:
         countAndSay(n) = RLE (CAS(n-1)), where CAS(1) = "1"
         CAS(n) = RLE(RLE(CAS(n-2)))
         O(n*k)
-        OPT
         '''
-
-        def CAS(x):
-            if x==1:
-                return "1"
-            curr = CAS(x-1)
+        curr = "1"
+        for _ in range(2,n+1):
             res = ""
-            i = 0
+            i=0
             while i<len(curr):
                 ch = curr[i]
                 count = 1
@@ -22,7 +18,9 @@ class Solution:
                     i+=1
                 res+= str(count)+ch
                 i+=1
-            return res
-        
-        return CAS(n)
+            curr=res
+
+        return curr
+                
+            
 
