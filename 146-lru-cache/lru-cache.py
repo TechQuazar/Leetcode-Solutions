@@ -64,33 +64,24 @@ class LRUCache:
             # print('PUT:',self.lookup)
             return
         # add node
+        newNode = Node(key,value)
+        self.lookup[key]= newNode
         if self.curr is None:
-            self.curr = Node(key,value)
-            self.lookup[key] = self.curr
+            self.curr = newNode
             self.last.next = self.curr
             self.curr.prev = self.last
-            self.size+=1
-            if self.size>self.capacity:
-                lastNode = self.last.next
-                lastNode.next.prev = self.last
-                self.last.next = lastNode.next
-                del self.lookup[lastNode.key]
-                del lastNode
-                self.size-=1
         else:
-            newNode = Node(key,value)
-            self.lookup[key]= newNode
             self.curr.next = newNode
             newNode.prev = self.curr
             self.curr = newNode
-            self.size+=1
-            if self.size>self.capacity:
-                lastNode = self.last.next
-                lastNode.next.prev = self.last
-                self.last.next = lastNode.next
-                del self.lookup[lastNode.key]
-                del lastNode
-                self.size-=1
+        self.size+=1
+        if self.size>self.capacity:
+            lastNode = self.last.next
+            lastNode.next.prev = self.last
+            self.last.next = lastNode.next
+            del self.lookup[lastNode.key]
+            del lastNode
+            self.size-=1
         # print('PUT:',self.lookup)
         return
         
