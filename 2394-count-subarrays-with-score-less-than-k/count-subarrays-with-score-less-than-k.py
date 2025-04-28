@@ -19,18 +19,24 @@ class Solution:
         res = 0
         score = 0
         totalSum = 0
+        ans = 0
         while r<n:
             curr = nums[r]
             totalSum+=curr
             score = totalSum*(r-l+1)
-            # print('Score,r,l',score,r,l)
+            
                 # we need to caculate subarray for the prev and reset everything
             while score>=k and l<=r:
+                print('Score,l,r, totalSum',score,l,r, totalSum)
+                ans+= (r-l)
                 totalSum-=nums[l]
                 l+=1
                 score = totalSum*(r-l+1)
-            res += (r-l+1)
+            # res += (r-l+1)
             r+=1
 
-        # print('R,L',r,l,res)
-        return res
+        print('R,L',r,l,ans)
+        if l<r:
+            ans+= (r-l)*(r-l+1)//2
+        # ans+= ()
+        return ans
