@@ -13,13 +13,10 @@ class Solution:
                 return True
             if node in seen:
                 return False
-            # if node in cache:
-            #     return list(cache[node])
             seen.add(node)
             for prereq in adj[node]:
                 if not dfs(prereq):
                     return False
-                # print('node,prereq,curr',node,prereq)
             if node not in visited:
                 res.append(node)
                 visited.add(node)
@@ -29,7 +26,5 @@ class Solution:
         res = []
         for i in range(n):
             seen = set()
-            if i not in visited:
-                if not dfs(i):
-                    return []
-        return res
+            dfs(i)
+        return res if len(res)==n else []
