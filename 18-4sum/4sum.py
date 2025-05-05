@@ -3,7 +3,7 @@ class Solution:
         '''
         [-2 -1 0 0 1 2]
         '''
-        res = []
+        res = set()
         nums.sort()
         n = len(nums)
         for i in range(n):
@@ -20,11 +20,11 @@ class Solution:
                     last = target - nums[k] - currSum
                     if last in seen:
                         # print('k',k)
-                        res.append([nums[i],nums[j],nums[k],last])
+                        res.add((nums[i],nums[j],nums[k],last))
                         while k<n-1 and nums[k+1]==nums[k]:
                             k+=1
                     
                     seen.add(nums[k])
                     k+=1
                     
-        return res
+        return list(map(list,res))
