@@ -14,25 +14,20 @@ class Solution:
         Recur on curr node. is the value on diff subtree,? if yes return that. If not, recur on its children again.
         I think this is the optimal approach.
         '''
-        res = None
         def recur(node):
-            nonlocal res
             if not node: 
-                return
+                return None
             
             if node.val!= p.val and node.val!=q.val:
                 if (p.val< node.val <q.val) or (q.val < node.val < p.val):
-                    res = node
-                    return
+                    return node
                 else:
                     if p.val < node.val and q.val < node.val:
-                        recur(node.left)
+                        return recur(node.left)
                     elif p.val> node.val and q.val> node.val:
-                        recur(node.right)
+                        return recur(node.right)
             else:
-                res = node
-            
-            return
+                return node
 
-        recur(root)
-        return res
+        return recur(root)
+        
