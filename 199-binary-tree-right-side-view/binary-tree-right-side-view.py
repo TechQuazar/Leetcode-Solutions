@@ -15,12 +15,12 @@ class Solution:
             return res
         q = deque()
         q.append((root,0)) # node,level
-        levelFilled = defaultdict(bool)
+        levelToFill = 0
         while q:
             node, level = q.popleft()
-            if level not in levelFilled:
+            if level==levelToFill:
                 res.append(node.val)
-                levelFilled[level] = True
+                levelToFill+=1
             if node.right:
                 q.append((node.right,level+1))
             if node.left:
