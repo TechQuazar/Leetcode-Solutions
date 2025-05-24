@@ -8,35 +8,45 @@
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         """
-        LC interview simul
-        1. p,q have a common parent
-        2. p contains q
-        3. q contains p
-        Brute force - given uniq node values, maintain 2 lists that track the path from root to p and q
-        find the first common element in both lists from the right to left -> O(N**2) op, where N = total nodes
-        -hint
-        That works, but can you think of a way to find the LCA without explicitly storing the entire paths? Is there a way to       identify the common ancestor during traversal itself?"
-        After hint
-        if we DFS, we will reach p/q first. Recursively, we can alert each node that p has been found, and if the same node
-        finds q in its other path, its the LCA.
-        Approach OK, start coding
-        1. each node checks its left and right subtrees.
-        2. if p/q is found, it returns True.
-        3. The parent catches that true, and passes it along to its right child
-        4. How to return the result? The LCA will catch it.
-        5. Function declr - node, foundP, foundQ.
+        LCA if p,q exsists. If not return None
+        Find LCA through DFS. 
+        1. we search its children recursively, and return the P or Q node if they are found, else return None
+        2. We also check if curr is p or q.
+        3. We need either (p and q) to be true or we need curr and (p or q) to be true. If both conditions are not, we return None
+        for not found.
+        TC O(N), N = total nodes, SC O(H), height of tree for recursive stack
+        - follow up: How will your function ensure that both p and q were actually found before returning the result?
+        we can have 2 variables, foundP and foundQ, which will be set depending on what each recursion returns using if else
+        - hint
+        return LCA, foundP, foundQ.
         """
-        res = None
         def recur(node):
-            nonlocal res
             if not node:
-                return False
-            foundP = recur(node.left)
-            foundQ = recur(node.right)
-            foundX = node.val==p.val or node.val==q.val
-            if ((foundP or foundQ) and foundX) or (not foundX and foundP and foundQ):
-                res = node
-            return foundP or foundQ or foundX
-        recur(root)
-        return res
+                return (None, False, False)
             
+            leftLCA, leftP, leftQ = recur(node.left)
+            rightLCA, rightP, rightQ = recur(node.right)
+
+            currP = node==p
+            currQ = node==q
+            
+            foundP = leftP or rightP or currP
+            foundQ = leftQ or rightQ or currQ
+
+            if leftLCA:
+                return (leftLCA, foundP, foundQ)
+            if rightLCA:
+                return (rightLCA, foundP, foundQ)
+
+            if (leftP and rightQ) or (leftQ and rightP) or (currP and (leftQ or rightQ)) or (currQ and (leftP or rightP)):
+                return (node, foundP, foundQ)
+            
+            return (None, foundP, foundQ)
+
+        LCA, foundP, foundQ = recur(root)
+        if foundP and foundQ:
+            return LCA
+        return None
+            
+            
+
