@@ -18,14 +18,10 @@ class Solution:
             if not node: 
                 return None
             
-            if node.val!= p.val and node.val!=q.val:
-                if (p.val< node.val <q.val) or (q.val < node.val < p.val):
-                    return node
-                else:
-                    if p.val < node.val and q.val < node.val:
-                        return recur(node.left)
-                    elif p.val> node.val and q.val> node.val:
-                        return recur(node.right)
+            if p.val < node.val and q.val < node.val:
+                return recur(node.left)
+            elif p.val> node.val and q.val > node.val:
+                return recur(node.right)
             else:
                 return node
 
