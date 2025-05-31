@@ -1,19 +1,26 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        n = len(coins)
-        cache = {}
-        def recur(i,total):
-            # print('i,tot',i,total)
-            res = float('inf')
-            if total==amount:
-                return 0
-            if i>=n or total>amount:
-                return float('inf')
-            if (i,total) in cache:
-                return cache[(i,total)]
-            res = min(res,1+recur(i,total+coins[i]), recur(i+1,total))
-            cache[(i,total)] = res
-            return res
-
-        res = recur(0,0)
-        return res if res!=float('inf') else -1
+        m = len(coins)
+        if amount==0:
+            return 0
+        if m==0:
+            return -1
+        dp = [float('inf') for _ in range(0,amount+1)]
+        dp[0] = 0
+        filtered_coins = []
+        for c in coins:
+            if c>amount:
+                continue
+            dp[c] = 1
+            filtered_coins.append(c)
+        
+        coins = filtered_coins
+        
+        for i in range(1,amount+1):
+            # dp[i] is how quick can you reach this with given coins
+            for c in coins:
+                if i-c>=0:
+                    dp[i] = min(dp[i],dp[i-c]+1)
+        
+        return dp[-1] if dp[-1]!=float('inf') else -1
+            
