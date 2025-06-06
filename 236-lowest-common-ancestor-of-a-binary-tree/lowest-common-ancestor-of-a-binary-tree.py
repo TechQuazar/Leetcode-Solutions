@@ -7,18 +7,18 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-
         def recur(node):
             if not node:
                 return None
-            left = recur(node.left)
-            right = recur(node.right)
-            
-            if node==p or node==q:
+            foundP = recur(node.left)
+            foundQ = recur(node.right)
+            foundX = node if (node.val==p.val or node.val==q.val) else None
+            if ((foundP or foundQ) and foundX) or (not foundX and foundP and foundQ):
                 return node
-            if left and right:
-                return node
-            
-            return left if left else right
-            
+            if foundX:
+                return foundX
+            if foundP:
+                return foundP
+            return foundQ
         return recur(root)
+            
