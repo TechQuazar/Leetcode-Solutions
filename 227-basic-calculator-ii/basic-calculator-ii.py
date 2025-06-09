@@ -3,20 +3,25 @@ class Solution:
         s = s.replace(" ","")
         s = s+'+'
         op = "+"
-        st = []
+        prevNum = 0
+        res = 0
         curr = 0
         for i,ch in enumerate(s):
             if ch.isdigit():
                 curr = curr*10 + int(ch)
             elif ch in '+-/*':
                 if op=='+':
-                    st.append(curr)
+                    res+= prevNum
+                    prevNum = curr
                 if op=='-':
-                    st.append(-curr)
+                    res+= prevNum
+                    prevNum = -curr
                 if op=='*':
-                    st.append(st.pop()*curr)
+                    # res+= prevNum*curr
+                    prevNum = prevNum*curr
                 if op=='/':
-                   st.append(int(st.pop()/curr))
+                    # res+= int(prevNum/curr)
+                    prevNum = int(prevNum/curr)
                 op = ch
                 curr = 0
-        return sum(st)
+        return res+prevNum
