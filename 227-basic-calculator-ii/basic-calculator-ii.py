@@ -1,27 +1,23 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        s = s.replace(" ","")
-        s = s+'+'
-        op = "+"
-        prevNum = 0
-        res = 0
+        s = s.replace(" ",'')
+        op = '+'
+        s += '+'
         curr = 0
-        for i,ch in enumerate(s):
+        st = []
+        for ch in s:
             if ch.isdigit():
                 curr = curr*10 + int(ch)
-            elif ch in '+-/*':
+            elif ch in '+-*/':
                 if op=='+':
-                    res+= prevNum
-                    prevNum = curr
-                if op=='-':
-                    res+= prevNum
-                    prevNum = -curr
-                if op=='*':
-                    # res+= prevNum*curr
-                    prevNum = prevNum*curr
-                if op=='/':
-                    # res+= int(prevNum/curr)
-                    prevNum = int(prevNum/curr)
-                op = ch
+                    st.append(curr)
+                elif op=='-':
+                    st.append(-curr)
+                elif op=='*':
+                    st.append(st.pop()*curr)
+                elif op=='/':
+                    st.append(int(st.pop()/curr))
                 curr = 0
-        return res+prevNum
+                op = ch
+
+        return sum(st)
