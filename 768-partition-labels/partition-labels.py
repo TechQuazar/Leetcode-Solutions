@@ -1,31 +1,29 @@
-from collections import Counter
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
-        '''
-        preprocessing -> in order
-        for i in range(n) -> at each i check whats the count of that char
-        If == total count, partition it
-        Do the same for all the chars in that window
-        works cause going in order, if u encounter a char, you cant stop window till its count ==0 else it wont be possible to split
-        '''
-        l,r=0,0
         n = len(s)
-        totalCount = Counter(s)
-        window = defaultdict(int)
-        currLen = 0
+        if n==0:
+            return []
+        if n==1:
+            return [1]
+        indices = Counter(s)
+        i=0
+        freq = defaultdict(int)
         res = []
-        while r<n:
-            curr = s[r]
-            currLen+=1
-            window[curr]+=1
-            isValid = True
-            for k,v in window.items():
-                if totalCount[k]!=window[k]:
-                    isValid=False
-                    break
-            if isValid:
-                window = defaultdict(int)
-                res.append(currLen)
-                currLen = 0
-            r+=1
+        def isWindowGood():
+            for k,v in freq.items():
+                if indices[k]!=v:
+                    return False
+            return True
+        
+        while i<n:
+            curr = s[i]
+            freq[curr]+=1
+            if indices[curr]==freq[curr]:
+                if isWindowGood():
+                    res.append(i+1)
+                    nextRes = self.partitionLabels(s[i+1:])
+                    res.extend(nextRes)
+                    return res
+            i+=1
+    
         return res
