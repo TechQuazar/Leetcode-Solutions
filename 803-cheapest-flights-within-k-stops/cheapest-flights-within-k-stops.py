@@ -1,23 +1,19 @@
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        pq = []
-        heapq.heappush(pq,(0,src,0)) # dist,currNode,stops
-        adj = defaultdict(list)
-        for s,d,price in flights:
-            adj[s].append((d,price))
-        visited = defaultdict(int)
+        """
+        k stops => k+1 edges
+        total n nodes, keep track of prices for each and iterate k+1 to get the full picture with shortest prices
+        Bellman ford
+        """
+        prices = [float('inf')]*n
+        prices[src] = 0
         res = []
-        while pq:
-            dist,curr,stops = heapq.heappop(pq)
-            if curr==dst:
-                return dist
-            if stops>k:
-                continue
-            if curr in visited and visited[curr]<=stops: #don't visit if we already visited with less stops
-                continue
-            visited[curr] = stops
-
-            for nei, val in adj[curr]:
-                heapq.heappush(pq,(val+dist, nei, stops+1))
-        
-        return -1
+        for i in range(k+1):
+            temp = prices.copy()
+            for u,v,dist in flights:
+                if prices[u]==float('inf'):
+                    continue # can't reach this yet
+                if prices[u]+dist < temp[v]:
+                    temp[v] = prices[u]+dist
+            prices = temp
+        return -1 if prices[dst]==float('inf') else prices[dst]
