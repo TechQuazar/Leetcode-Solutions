@@ -1,15 +1,16 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         n = len(intervals)
-        intervals.sort(key=lambda x:x[0])
+        intervals.sort(key = lambda x:x[0])
         res = []
-        res.append(intervals[0])
-        for i in range(1,n):
-            start,end = intervals[i]
-            _,ei = res[-1]
-            if start<=ei:
-                res[-1][1] = max(end,ei)
+        si = intervals[0][0]
+        ei = intervals[0][1]
+        for start,end in intervals:
+            if start<=ei: #overlap
+                ei = max(end,ei)
             else:
-                res.append([start,end])
-
+                res.append([si,ei])
+                si = start
+                ei = end
+        res.append([si,ei])
         return res
