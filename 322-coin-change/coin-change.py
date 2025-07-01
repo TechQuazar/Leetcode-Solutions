@@ -1,26 +1,26 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        m = len(coins)
         if amount==0:
             return 0
-        if m==0:
+        if len(coins)==0:
             return -1
-        dp = [float('inf') for _ in range(0,amount+1)]
-        dp[0] = 0
-        filtered_coins = []
-        for c in coins:
-            if c>amount:
-                continue
-            dp[c] = 1
-            filtered_coins.append(c)
         
-        coins = filtered_coins
-        
-        for i in range(1,amount+1):
-            # dp[i] is how quick can you reach this with given coins
-            for c in coins:
-                if i-c>=0:
-                    dp[i] = min(dp[i],dp[i-c]+1)
-        
-        return dp[-1] if dp[-1]!=float('inf') else -1
-            
+        n = len(coins)
+
+        dp = [[-1 for _ in range(amount)] for _ in range(n)]
+        def recur(i,total):
+            if total==amount:
+                return 0
+            if total>amount or i>=n:
+                return float('inf')
+            if dp[i][total]!=-1:
+                return dp[i][total]
+            res = float('inf')
+            if coins[i]+total<=amount:
+                res = min(res, 1+recur(i,total+coins[i]))
+            res = min(res, recur(i+1, total))
+            dp[i][total] = res
+            return res
+
+        res =  recur(0,0)
+        return res if res!=float('inf') else -1
