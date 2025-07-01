@@ -11,20 +11,20 @@ class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if not node:
             return None
+        newRoot = None
+        cache = {}
         q = deque()
         q.append(node)
-        curr = Node(node.val)
-        res = curr
-        nodeMap = {}
-        nodeMap[node.val] = curr
         while q:
-            og = q.popleft()
-            for nei in og.neighbors:
-                if nei.val not in nodeMap:
-                    newNode = Node(nei.val)
-                    nodeMap[nei.val] = newNode
+            currNode = q.popleft()
+            if not newRoot:
+                newRoot = Node(currNode.val)
+                cache[currNode.val] = newRoot
+            for nei in currNode.neighbors:
+                if nei.val not in cache:
+                    neiNode = Node(nei.val)
+                    cache[nei.val] = neiNode
                     q.append(nei)
-                nodeMap[og.val].neighbors.append(nodeMap[nei.val])
+                cache[currNode.val].neighbors.append(cache[nei.val])
 
-        # print('res',res.val, res.neighbors)
-        return res
+        return newRoot
