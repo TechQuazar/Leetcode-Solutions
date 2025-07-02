@@ -1,18 +1,23 @@
-from typing import List
-
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        total_sum = sum(nums)
-        if total_sum % 2 != 0:
-            return False  # If sum is odd, we cannot partition equally
+        totalSum = sum(nums)
+        if totalSum%2!=0:
+            return False
+        partSum = totalSum//2
+        n = len(nums)
+        dp = [[False for _ in range(partSum+1)] for _ in range(n+1)]
+        # dp[i][n] means can be max sum n with first i elements (including 0 elements)
+
+        # if sum ==0, then i==0 is True
+        dp[0][0] = True
+        for i in range(n+1):
+            for currSum in range(partSum+1):
+                # can we for the currSum without including the current number -> nums[i-1]?
+                if dp[i-1][currSum]:
+                    dp[i][currSum] = True
+                if nums[i-1]<=currSum and dp[i-1][currSum-nums[i-1]]:
+                    dp[i][currSum] = True
+                    
+        return dp[-1][-1]
+
         
-        target = total_sum // 2
-        dp = [False] * (target + 1)  # dp[s] represents whether we can form sum 's'
-        dp[0] = True  # Base case: sum of 0 can always be formed
-
-        for num in nums:
-            # Iterate backwards to prevent overwriting values needed in this iteration
-            for s in range(target, num - 1, -1):
-                dp[s] = dp[s] or dp[s - num]
-
-        return dp[target]  # If target sum can be formed, return True
